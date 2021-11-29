@@ -1,0 +1,70 @@
+plugins {
+    id 'java-library'
+    id 'org.springframework.boot' version "2.3.2.RELEASE"
+    id 'io.spring.dependency-management' version "1.0.9.RELEASE"
+
+    // TODO warning 수정: Gradle 8.0에 맞는 버전 필요
+//    id "org.asciidoctor.convert" version "1.5.9.2"
+}
+
+allprojects {
+    group = 'com.imarket'
+    version = '1.0'
+    sourceCompatibility = '1.8'
+
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+subprojects {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java-library'
+    apply plugin: 'java'
+//    apply plugin: 'org.asciidoctor.convert'
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+//    asciidoctor {
+//        sourceDir 'src/main/asciidoc'
+//        dependsOn test
+//    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter'
+        implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+        compileOnly 'org.projectlombok:lombok'
+        testCompileOnly 'org.projectlombok:lombok'
+
+        // TODO warning 수정: Gradle 8.0에 맞는 버전 필요
+        annotationProcessor("org.projectlombok:lombok")
+        // TODO warning 수정: Gradle 8.0에 맞는 버전 필요
+        testAnnotationProcessor 'org.projectlombok:lombok'
+        // TODO warning 수정: Gradle 8.0에 맞는 버전 필요
+        annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+        implementation 'org.springframework.boot:spring-boot-configuration-processor'
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+//        testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc')
+//        asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    }
+}
+
+bootJar {
+    enabled = false
+}

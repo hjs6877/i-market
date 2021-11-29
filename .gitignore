@@ -150,33 +150,4 @@ gradle-app.setting
 ### Gradle Patch ###
 **/build/
 
-# End of https://www.toptal.com/developers/gitignore/api/intellij,gradle,java
-/MarketServer.pid
-
-/release/.nohup.out.swp
-/release/.start.sh.swp
-/release/MarketServer.pid
-/release/nohup.out
-/release/logs/
-/release/libs/
-/release/logs/
-
-/release/init.bat
-/release/init.sh
-/release/market-api-*.jar
-/release/MarketServer.pid
-/release/start.bat
-/release/start.sh
-/release/stop.bat
-/release/stop.sh
-/release/config/application.yml
-/release/config/application-dev.yml
-/release/config/application-local.yml
-/release/config/application-prod.yml
-/release/config/logback-dev.yml
-/release/config/logback-local.yml
-/release/config/logback-prod.yml
-/release/config/logback-spring.xml
-
-
-market-domain/src/main/generated/com/pentasecurity/marketdomain/domain/Q*
+market-domain/src/main/generated/com/imarket/marketdomain/domain/Q*
