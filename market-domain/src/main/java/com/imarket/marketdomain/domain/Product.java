@@ -16,8 +16,7 @@ import java.util.List;
 public class Product extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
-    private long id;
+    private long productId;
 
     @Column(nullable = false)
     private String productName;

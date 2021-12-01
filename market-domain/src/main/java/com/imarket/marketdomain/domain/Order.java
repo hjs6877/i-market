@@ -17,8 +17,7 @@ import java.time.LocalDateTime;
 public class Order extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
-    private long id;
+    private long orderId;
 
     @Column(nullable = false, unique = true)
     private String orderNumber;

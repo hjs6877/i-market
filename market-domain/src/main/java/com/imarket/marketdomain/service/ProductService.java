@@ -2,7 +2,7 @@ package com.imarket.marketdomain.service;
 
 import com.imarket.marketdomain.domain.Product;
 import com.imarket.marketdomain.exception.ProductNotFoundException;
-import com.imarket.marketdomain.repository.ProductRepository;
+import com.imarket.marketdomain.repository.product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +33,7 @@ public class ProductService {
                                        String description,
                                        int page,
                                        int size) {
-        return productRepository.searchProductPageable(productName, description,
+        return productRepository.searchProduct(productName, description,
                 PageRequest.of(page, size, Sort.by("createdAt").descending()));
     }
 }

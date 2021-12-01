@@ -1,4 +1,4 @@
-package com.imarket.marketdomain.repository;
+package com.imarket.marketdomain.repository.product;
 
 import com.imarket.marketdomain.domain.Product;
 import com.querydsl.core.BooleanBuilder;
@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import static com.imarket.marketdomain.domain.QProduct.product;
-import java.util.List;
 
 public class ProductQueryRepositoryImpl implements ProductQueryRepository {
     private final JPAQueryFactory queryFactory;
@@ -20,8 +19,9 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
         this.queryFactory = queryFactory;
     }
 
+    // TODO Refactoring
     @Override
-    public Page<Product> searchProductPageable(String productName, String description, Pageable pageable) {
+    public Page<Product> searchProduct(String productName, String description, Pageable pageable) {
         BooleanBuilder builder = getSearchCondition(productName, description);
         QueryResults<Product> results = queryFactory.selectFrom(product)
                 .where(builder)
@@ -33,6 +33,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
         return new PageImpl<>(results.getResults(), pageable, results.getTotal());
     }
 
+    // TODO Refactoring
     private BooleanBuilder getSearchCondition(String productName, String description) {
         BooleanBuilder builder = new BooleanBuilder();
         if (StringUtils.isNotEmpty(productName)) {

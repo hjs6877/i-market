@@ -11,12 +11,10 @@ import javax.validation.constraints.Positive;
 @Data
 public class ProductDto {
     private long productId;
-    private long sellerId;
     private String productName;
     private String description;
     private long price;
     private boolean canPurchase;
-    private long productCategoryId;
 
     @Data
     public static class Post {
@@ -42,9 +40,9 @@ public class ProductDto {
 
     public Product toProduct(ProductDto.Post productPostDto) {
         Seller seller = new Seller();
-        seller.setId(productPostDto.getSellerId());
+        seller.setSellerId(productPostDto.getSellerId());
         ProductCategory productCategory = new ProductCategory();
-        productCategory.setId(productPostDto.getProductCategoryId());
+        productCategory.setProductCategoryId(productPostDto.getProductCategoryId());
         Product product = new Product();
 
         product.setSeller(seller);
@@ -57,9 +55,7 @@ public class ProductDto {
     }
 
     public ProductDto toProductDto(Product product) {
-        this.setProductId(product.getId());
-        this.setSellerId(product.getSeller().getId());
-        this.setProductCategoryId(product.getProductCategory().getId());
+        this.setProductId(product.getProductId());
         this.setProductName(product.getProductName());
         this.setDescription(product.getDescription());
         this.setPrice(product.getPrice());

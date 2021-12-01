@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class OrderDto {
-    private long id;
+    private long orderId;
     private String orderNumber;
     private Order.OrderStatus orderStatus;
     private String productName;
@@ -36,9 +36,9 @@ public class OrderDto {
         Product product = new Product();
         Order order = new Order();
 
-        seller.setId(orderPostDto.getSellerId());
-        buyer.setId(orderPostDto.getBuyerId());
-        product.setId(orderPostDto.getProductId());
+        seller.setSellerId(orderPostDto.getSellerId());
+        buyer.setBuyerId(orderPostDto.getBuyerId());
+        product.setProductId(orderPostDto.getProductId());
 
         order.setSeller(seller);
         order.setBuyer(buyer);
@@ -48,13 +48,13 @@ public class OrderDto {
     }
 
     public OrderDto toOrderDto(Order order) {
-        this.setId(order.getId());
+        this.setOrderId(order.getOrderId());
         this.setOrderNumber(order.getOrderNumber());
         this.setOrderStatus(order.getOrderStatus());
+        this.setProductName(order.getProduct().getProductName());
         this.setAmount(order.getAmount());
         this.setCreatedAt(order.getCreatedAt());
 
-        // TODO Product name 채우는 작업
         return this;
     }
 }

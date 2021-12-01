@@ -6,8 +6,11 @@ import com.imarket.marketdomain.domain.Seller;
 import com.imarket.marketdomain.exception.MemberDuplicatedException;
 import com.imarket.marketdomain.exception.MemberNotFoundException;
 import com.imarket.marketdomain.exception.PasswordNotMatchException;
-import com.imarket.marketdomain.repository.MemberRepository;
+import com.imarket.marketdomain.repository.member.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,8 +49,22 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    // Requirement: 단일 회원의 상세 정보를 조회할 수 있어야 한다.
     public Member findMemberById(long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
         return member.orElseThrow(MemberNotFoundException::new);
+    }
+
+    public Page<Member> searchMember(String email,
+                                     String name,
+                                     int page,
+                                     int size) {
+        /**
+         * Requirement
+         *  - 페이지네이션으로 조회할 수 있어야 한다.
+         *  - 이름, 이메일을 이용하여 검색을 할 수 있어야 한다.
+         */
+        return memberRepository.searchMember(email, name,
+                PageRequest.of(page, size, Sort.by("createdAt").descending()));
     }
 }

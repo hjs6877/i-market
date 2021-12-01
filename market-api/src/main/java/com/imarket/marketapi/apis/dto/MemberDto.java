@@ -1,20 +1,23 @@
 package com.imarket.marketapi.apis.dto;
 
 import com.imarket.marketdomain.domain.Member;
+import com.imarket.marketdomain.domain.Order;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 @Data
 public class MemberDto {
-    private long id;
+    private long memberId;
     private String email;
     private String name;
     private String nickName;
     private String phone;
     private Member.Gender gender;
+    private OrderDto order;
 
     @Data
     public static class Post {
@@ -48,5 +51,28 @@ public class MemberDto {
     @Data
     public static class Patch {
         // TODO implementation
+    }
+
+    @Data
+    public static class Search {
+        private String email;
+        private String name;
+    }
+
+    public MemberDto toMemberDto(Member member) {
+        this.memberId = member.getMemberId();
+        this.email = member.getEmail();
+        this.name = member.getName();
+        this.nickName = member.getNickName();
+        this.phone = member.getPhone();
+        this.gender = member.getGender();
+
+        // Requirement: 각 회원의 마지막 주문 정보가 포함되어야 한다.
+        List<Order> orderList = member.getBuyer().getOrders();
+        if (orderList.size() > 0) {
+            OrderDto orderDto = new OrderDto();
+            this.order = orderDto.toOrderDto(orderList.get(orderList.size() - 1));
+        }
+        return this;
     }
 }

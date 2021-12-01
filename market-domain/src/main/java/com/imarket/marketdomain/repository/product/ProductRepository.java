@@ -1,4 +1,4 @@
-package com.imarket.marketdomain.repository;
+package com.imarket.marketdomain.repository.product;
 
 import com.imarket.marketdomain.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;

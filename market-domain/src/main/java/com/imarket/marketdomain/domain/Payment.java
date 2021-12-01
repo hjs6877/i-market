@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Payment extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long paymentId;
 
     @Column(name = "card_nick_name", nullable = false)
     private String cardNickName;

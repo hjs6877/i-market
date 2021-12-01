@@ -16,8 +16,7 @@ import java.util.List;
 public class Seller extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "seller_id")
-    private long id;
+    private long sellerId;
 
     @OneToOne
     @JoinColumn(name = "member_id")

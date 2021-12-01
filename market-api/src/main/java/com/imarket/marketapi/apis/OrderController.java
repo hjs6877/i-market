@@ -30,4 +30,12 @@ public class OrderController {
         Order order = orderService.saveOrder(orderDto.toOrder(body));
         return ResponseEntity.ok(new SingleResponse<>(HttpStatus.OK, orderDto.toOrderDto(order)));
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(path = "/{order-id}")
+    public ResponseEntity<SingleResponse<OrderDto>> getOrder(@PathVariable("order-id") long orderId) {
+        OrderDto orderDto = new OrderDto();
+        Order order = orderService.findOrderById(orderId);
+        return ResponseEntity.ok(new SingleResponse<>(HttpStatus.OK, orderDto.toOrderDto(order)));
+    }
 }

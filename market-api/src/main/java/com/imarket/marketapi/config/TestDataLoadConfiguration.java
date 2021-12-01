@@ -1,8 +1,8 @@
 package com.imarket.marketapi.config;
 
 import com.imarket.marketdomain.domain.*;
-import com.imarket.marketdomain.repository.MemberRepository;
-import com.imarket.marketdomain.repository.ProductCategoryRepository;
+import com.imarket.marketdomain.repository.member.MemberRepository;
+import com.imarket.marketdomain.repository.product_category.ProductCategoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
