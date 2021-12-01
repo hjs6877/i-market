@@ -34,6 +34,12 @@ public class ProductDto {
         private String description;
     }
 
+    @Data
+    public static class Search {
+        private String productName;
+        private String description;
+    }
+
     public Product toProduct(ProductDto.Post productPostDto) {
         Seller seller = new Seller();
         seller.setId(productPostDto.getSellerId());

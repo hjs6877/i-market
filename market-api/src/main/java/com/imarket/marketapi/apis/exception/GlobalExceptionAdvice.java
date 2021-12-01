@@ -26,7 +26,7 @@ public class GlobalExceptionAdvice {
     protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error("# handle MethodArgumentNotValidException", e);
         final ErrorResponse response = ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getBindingResult());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
     /**
@@ -37,8 +37,8 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
         log.error("# handle MethodArgumentTypeMismatchException", e);
-        final ErrorResponse response = ErrorResponse.of(e);
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        final ErrorResponse response = ErrorResponse.of(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
     /**
@@ -62,7 +62,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error("handle HttpRequestMethodNotSupportedException", e);
-        final ErrorResponse response = ErrorResponse.of(HttpStatus.METHOD_NOT_ALLOWED);
+        final ErrorResponse response = ErrorResponse.of(e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
@@ -74,7 +74,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(AccessDeniedException.class)
     protected ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
         log.error("handle AccessDeniedException", e);
-        final ErrorResponse response = ErrorResponse.of(HttpStatus.UNAUTHORIZED);
+        final ErrorResponse response = ErrorResponse.of(e.getMessage(), HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
@@ -86,7 +86,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     protected ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         log.error("# handle HttpMessageNotReadableException", e);
-        final ErrorResponse response = ErrorResponse.of(HttpStatus.BAD_REQUEST);
+        final ErrorResponse response = ErrorResponse.of(e.getMessage(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
@@ -98,7 +98,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     protected ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
         log.error("# handle MissingServletRequestParameterException", e);
-        final ErrorResponse response = ErrorResponse.of(HttpStatus.BAD_REQUEST);
+        final ErrorResponse response = ErrorResponse.of(e.getMessage(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
@@ -110,7 +110,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(ExpiredJwtException.class)
     protected ResponseEntity<ErrorResponse> handleExpiredJwtException(ExpiredJwtException e) {
         log.error("# handle ExpiredJwtException", e);
-        final ErrorResponse response = ErrorResponse.of(HttpStatus.UNAUTHORIZED);
+        final ErrorResponse response = ErrorResponse.of(e.getMessage(), HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
@@ -124,7 +124,7 @@ public class GlobalExceptionAdvice {
         log.error("# handle Exception", e);
         // TODO implementation: send an email to Administrator
 
-        final ErrorResponse response = ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
+        final ErrorResponse response = ErrorResponse.of(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 

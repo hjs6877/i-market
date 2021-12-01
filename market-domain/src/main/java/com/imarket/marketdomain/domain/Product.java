@@ -1,12 +1,17 @@
 package com.imarket.marketdomain.domain;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"seller", "productCategory"})
 @Entity
 public class Product extends Auditable {
     @Id
@@ -66,5 +71,10 @@ public class Product extends Auditable {
         if (!this.productCategory.getProduct().contains(this)) {
             this.productCategory.getProduct().add(this);
         }
+    }
+
+    @Override
+    public String toString(){
+        return null;
     }
 }

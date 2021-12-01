@@ -37,6 +37,10 @@ public class ErrorResponse<T> extends CommonResponse {
         return new ErrorResponse(status);
     }
 
+    public static ErrorResponse of(final String message, final HttpStatus status) {
+        return new ErrorResponse(message, status.value());
+    }
+
     public static ErrorResponse of(final HttpStatus httpStatus, final BindingResult bindingResult) {
         return new ErrorResponse(httpStatus, GlobalError.of(bindingResult), FieldError.of(bindingResult));
     }

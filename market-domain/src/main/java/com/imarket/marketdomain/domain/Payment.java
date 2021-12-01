@@ -1,10 +1,15 @@
 package com.imarket.marketdomain.domain;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"buyer"})
 @Entity
 public class Payment extends Auditable {
     @Id
