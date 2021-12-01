@@ -1,11 +1,14 @@
 package com.imarket.marketdomain.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,6 +19,21 @@ public class Order extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private long id;
+
+    @Column(nullable = false, unique = true)
+    private String orderNumber;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderStatus orderStatus = OrderStatus.ORDER_REQUEST;
+
+    @Column(nullable = false)
+    private int amount;
+
+    @CreatedDate
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime paidAt;
 
     @ManyToOne
     @JoinColumn(name = "buyer_id")
@@ -62,5 +80,12 @@ public class Order extends Auditable {
         if (!this.product.getOrders().contains(this)) {
             this.product.getOrders().add(this);
         }
+    }
+
+    public enum OrderStatus{
+        ORDER_REQUEST,
+        ORDER_CANCEL,
+        ORDER_RETURN,
+        ORDER_EXCHANGE
     }
 }

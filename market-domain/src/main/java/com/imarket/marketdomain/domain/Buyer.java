@@ -17,7 +17,7 @@ public class Buyer extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "buyer_id")
-    private long buyerId;
+    private long id;
 
     @OneToOne
     @JoinColumn(name = "member_id")
