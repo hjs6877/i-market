@@ -4,6 +4,9 @@ import com.imarket.marketdomain.domain.Order;
 import com.imarket.marketdomain.exception.OrderNotFoundException;
 import com.imarket.marketdomain.repository.order.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -28,5 +31,10 @@ public class OrderService {
     public Order findOrderById(long orderId) {
         Optional<Order> order = orderRepository.findById(orderId);
         return order.orElseThrow(OrderNotFoundException::new);
+    }
+
+    public Page<Order> findOrdersByBuyer(long buyerId, int page, int size) {
+        return orderRepository.findByBuyerBuyerId(buyerId,
+                PageRequest.of(page, size, Sort.by("createdAt").descending()));
     }
 }

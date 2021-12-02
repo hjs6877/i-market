@@ -54,7 +54,8 @@ public class ProductController {
         Page<Product> productPage = productService.searchProduct(searchDto.getProductName(),
                 searchDto.getDescription(), page, size);
         List<ProductDto> productDtoList = productPage.getContent()
-                .stream().map(product -> modelMapper.map(product, ProductDto.class))
+                .stream()
+                .map(product -> modelMapper.map(product, ProductDto.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new MultiResponse<>(HttpStatus.OK, productDtoList, productPage));
     }

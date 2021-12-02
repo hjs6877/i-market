@@ -1,18 +1,11 @@
-spring.jpa:
-  properties:
-    hibernate:
-      search:
-        default:
-          directory_provider: filesystem
-          indexBase: /home/imarket/tmp/indexed
-#security:
-#  enabled: true
-#  ignore:
-#    uri: /thereisnouri
-#jwt:
-#  secret: imarket@!123#$';
-#  access_token_validity: 60
-#  refresh_token_validity: 420
+security:
+  enabled: true
+  ignore:
+    uri: /thereisnouri
+jwt:
+  secret: imarket@!123#$';
+  access_token_validity: 60
+  refresh_token_validity: 420
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

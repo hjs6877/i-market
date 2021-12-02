@@ -2,7 +2,7 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-data-jpa'
     api group: 'com.h2database', name: 'h2'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.0'
-    implementation 'org.springframework.security:spring-security-crypto:5.6.0'
+
 //    api 'org.springframework.boot:spring-boot-starter-security'
     api 'io.jsonwebtoken:jjwt:0.9.1'
 //    implementation 'org.hibernate:hibernate-search-orm:5.11.1.Final'

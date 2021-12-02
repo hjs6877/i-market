@@ -22,7 +22,7 @@ public class Buyer extends Auditable {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "buyer")
+    @OneToMany(mappedBy = "buyer", cascade = CascadeType.PERSIST)
     private List<Payment> payments = new ArrayList<>();
 
     @OneToMany(mappedBy = "buyer")

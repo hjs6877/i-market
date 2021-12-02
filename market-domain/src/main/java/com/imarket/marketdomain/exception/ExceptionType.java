@@ -7,7 +7,8 @@ public enum ExceptionType {
     MEMBER_DUPLICATED("Member duplicated", 409),
     MEMBER_NOT_FOUND("Member not found", 404),
     PRODUCT_NOT_FOUND("Product not found", 404),
-    ORDER_NOT_FOUND("Order not found", 404);
+    ORDER_NOT_FOUND("Order not found", 404),
+    UNAUTHORIZED("Unauthorized", 401);
 
     @Getter
     private final String message;

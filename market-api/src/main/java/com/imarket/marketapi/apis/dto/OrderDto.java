@@ -27,6 +27,9 @@ public class OrderDto {
         private long sellerId;
 
         @Positive
+        private long paymentId;
+
+        @Positive
         private int amount;
     }
 
@@ -34,15 +37,17 @@ public class OrderDto {
         Seller seller = new Seller();
         Buyer buyer = new Buyer();
         Product product = new Product();
+        Payment payment = new Payment();
         Order order = new Order();
 
         seller.setSellerId(orderPostDto.getSellerId());
         buyer.setBuyerId(orderPostDto.getBuyerId());
         product.setProductId(orderPostDto.getProductId());
-
+        payment.setPaymentId(orderPostDto.getPaymentId());
         order.setSeller(seller);
         order.setBuyer(buyer);
         order.setProduct(product);
+        order.setPayment(payment);
         order.setAmount(orderPostDto.getAmount());
         return order;
     }

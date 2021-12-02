@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Slf4j
 @Configuration
@@ -15,12 +16,15 @@ import org.springframework.context.annotation.Profile;
 public class TestDataLoadConfiguration {
     private ProductCategoryRepository productCategoryRepository;
     private MemberRepository memberRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Bean
     public CommandLineRunner dataLoader(MemberRepository memberRepository,
-                                        ProductCategoryRepository productCategoryRepository) {
+                                        ProductCategoryRepository productCategoryRepository,
+                                        PasswordEncoder passwordEncoder) {
         this.memberRepository = memberRepository;
         this.productCategoryRepository = productCategoryRepository;
+        this.passwordEncoder = passwordEncoder;
 
         return (String... args) -> {
             log.info("# Initialize Sample Data.");
@@ -47,16 +51,39 @@ public class TestDataLoadConfiguration {
         productCategoryRepository.save(productCategory7);
         productCategoryRepository.save(productCategory8);
 
-        Member member1 = new Member("aaa@imarket.com",
-                "Hjs1234!", "Tom", "010-1234-1111", Member.Gender.MALE);
+        Member member1 = new Member("seller1@imarket.com",
+                passwordEncoder.encode("Hjs1234!"), "Tom", "010-1234-1111", Member.Gender.MALE);
         Seller seller1 = new Seller();
         Buyer buyer1 = new Buyer();
+        Product product1 = new Product("LG 냉장고", 200000);
+        Payment payment1 = new Payment("D뱅크", passwordEncoder.encode("1234-5678-1234-5678"));
         member1.setSeller(seller1);
         member1.setBuyer(buyer1);
-        Product product1 = new Product("LG 냉장고", 200000);
+        buyer1.addPayment(payment1);
         seller1.addProduct(product1);
         product1.setProductCategory(productCategory1);
 
+        Member member2 = new Member("buyer1@imarket.com",
+                passwordEncoder.encode("Hjs1234!"), "Tom", "010-1111-1111", Member.Gender.MALE);
+        Seller seller2 = new Seller();
+        Buyer buyer2 = new Buyer();
+        Payment payment2 = new Payment("A뱅크", passwordEncoder.encode("1111-2222-3333-4444"));
+        member1.setSeller(seller2);
+        member1.setBuyer(buyer2);
+        buyer1.addPayment(payment2);
+
+        Member member3 = new Member("buyer2@imarket.com",
+                passwordEncoder.encode("Hjs1234!"), "Jane", "010-2222-2222", Member.Gender.FEMALE);
+        Seller seller3 = new Seller();
+        Buyer buyer3 = new Buyer();
+        Payment payment3 = new Payment("B뱅크", passwordEncoder.encode("5555-5555-5555-5555"));
+        member1.setSeller(seller3);
+        member1.setBuyer(buyer3);
+        buyer1.addPayment(payment3);
+
+
         memberRepository.save(member1);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
     }
 }

@@ -46,6 +46,10 @@ public class Order extends Auditable {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @ManyToOne
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+
     public void setBuyer(Buyer buyer) {
         if (this.buyer != null) {
             this.buyer.getOrders().remove(this);
@@ -81,6 +85,16 @@ public class Order extends Auditable {
         }
     }
 
+    public void setPayment(Payment payment) {
+        if (this.payment != null) {
+            this.payment.getOrders().remove(this);
+        }
+        this.payment = payment;
+
+        if (this.payment.getOrders().contains(this)) {
+            this.payment.getOrders().add(this);
+        }
+    }
     public enum OrderStatus{
         ORDER_REQUEST,
         ORDER_CANCEL,
