@@ -55,6 +55,7 @@ public class AuthController {
         this.redisInfo = redisInfo;
     }
 
+    // Requirement: 회원 로그인/로그아웃을 할 수 있어야 한다.
     @PostMapping(value = "/login")
     public ResponseEntity<SingleResponse<LoginResult>> login(@RequestBody AuthDto authDto) throws Exception {
         final String username = authDto.getEmail();
@@ -76,34 +77,22 @@ public class AuthController {
         return ResponseEntity.ok(new SingleResponse(HttpStatus.OK, loginResult));
     }
 
+    // Requirement: 회원 로그인/로그아웃을 할 수 있어야 한다.
     @PostMapping(value = "/logout")
     public ResponseEntity<SingleResponse<Integer>> logout(@RequestHeader("Authorization") String accessToken) {
-        String username = null;
-        try {
-            if (accessToken != null && accessToken.startsWith("Bearer ")) {
-                accessToken = accessToken.substring(7);
-                log.info("token in requestfilter: " + accessToken);
-            } else {
-                throw new BusinessLogicException("JWT Token does not begin with Bearer String", ExceptionType.UNAUTHORIZED);
-            }
-            username = jwtTokenUtil.getUsernameFromToken(accessToken);
-
-        } catch (IllegalArgumentException e) {} catch (ExpiredJwtException e) { //expire됐을 때
-            // TODO Exception 처리 수정
-            username = e.getClaims().getSubject();
-            log.info("username from expired access token: " + username);
+        if (accessToken != null && accessToken.startsWith("Bearer ")) {
+            accessToken = accessToken.substring(7);
+        } else {
+            throw new BusinessLogicException("JWT Token does not begin with Bearer String", ExceptionType.UNAUTHORIZED);
         }
+        String username = jwtTokenUtil.getUsernameFromToken(accessToken);
 
         if (redisInfo.redisEnable) {
-            try {
-                if (redisInfo.redisEnable && redisTemplate.opsForValue().get(username) != null) {
-                    //delete refresh token
-                    redisTemplate.delete(username);
-                    redisTemplate.opsForValue().set(accessToken, new Token());
-                    redisTemplate.expire(accessToken, jwtInfo.JWT_ACCESS_TOKEN_VALIDITY, TimeUnit.MINUTES);
-                }
-            } catch (IllegalArgumentException e) {
-                log.warn("user does not exist");
+            if (redisInfo.redisEnable && redisTemplate.opsForValue().get(username) != null) {
+                //delete refresh token
+                redisTemplate.delete(username);
+                redisTemplate.opsForValue().set(accessToken, new Token());
+                redisTemplate.expire(accessToken, jwtInfo.JWT_ACCESS_TOKEN_VALIDITY, TimeUnit.MINUTES);
             }
         }
 
@@ -117,7 +106,6 @@ public class AuthController {
         try {
             accessToken = token.getAccessToken();
             final String refreshToken = token.getRefreshToken();
-            log.info("access token in rnat: " + accessToken);
             final String username = getUsernameFromAccessToken(accessToken);
 
             existRefreshToken(refreshToken);
@@ -132,7 +120,6 @@ public class AuthController {
                 verifyRefreshToken(() -> !refreshUsername.equals(username) || jwtTokenUtil.isTokenExpired(refreshToken));
                 newToken = renewToken(username);
             }
-
         } catch (Exception e) {
             throw new BusinessLogicException("your refresh token does not exist.", ExceptionType.UNAUTHORIZED);
         }
@@ -142,14 +129,7 @@ public class AuthController {
 
     private String getUsernameFromAccessToken(String accessToken) {
         String username = null;
-        try {
-            username = jwtTokenUtil.getUsernameFromToken(accessToken);
-        } catch (IllegalArgumentException e) {
-
-        } catch (ExpiredJwtException e) { //expire됐을 때
-            username = e.getClaims().getSubject();
-            log.info("username from expired access token: " + username);
-        }
+        username = jwtTokenUtil.getUsernameFromToken(accessToken);
         return username;
     }
     private void expireAccessToken(String accessToken) {
@@ -171,15 +151,9 @@ public class AuthController {
 
 
     private String getRefreshTokenFromDB(String username) {
-        String refreshTokenFromDb = null;
-        try {
-            ValueOperations<String, Object> vop = redisTemplate.opsForValue();
-            Token result = (Token) vop.get(username);
-            refreshTokenFromDb = result.getRefreshToken();
-            log.info("rtfrom db: " + refreshTokenFromDb);
-        } catch (IllegalArgumentException e) {
-            log.warn("illegal argument!!");
-        }
+        ValueOperations<String, Object> vop = redisTemplate.opsForValue();
+        Token result = (Token) vop.get(username);
+        String refreshTokenFromDb  = result.getRefreshToken();
         return refreshTokenFromDb;
     }
 

@@ -47,12 +47,12 @@ public class MemberController {
         return ResponseEntity.ok(new SingleResponse<>(HttpStatus.OK, modelMapper.map(member, MemberDto.class)));
     }
 
+    // TODO: 요구 사항이 조금 모호해서 구체적인 요구사항을 정의할 필요가 있음.
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public ResponseEntity<MultiResponse<MemberDto>> getAllMembers(@RequestParam("page") int page,
                                                                   @RequestParam("size") int size,
                                                                   MemberDto.Search searchDto) {
-
         Page<Member> memberPage = memberService.searchMember(searchDto.getEmail(),
                 searchDto.getName(), page, size);
         List<MemberDto> memberDtoList = memberPage.getContent()

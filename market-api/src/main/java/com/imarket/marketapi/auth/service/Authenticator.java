@@ -69,10 +69,6 @@ public class Authenticator {
         retok.setUsername(username);
         retok.setRefreshToken(refreshToken);
 
-        log.info("jwtInfo.JWT_REFRESH_TOKEN_VALIDITY: " + jwtInfo.JWT_REFRESH_TOKEN_VALIDITY);
-        log.info("jwtInfo.JWT_ACCESS_TOKEN_VALIDITY: " + jwtInfo.JWT_ACCESS_TOKEN_VALIDITY);
-        log.info("redisInfo.radisEnable: " + redisInfo.redisEnable);
-
         //generate Token and save in redis
         if (redisInfo.redisEnable) {
             ValueOperations<String, Object> vop = redisTemplate.opsForValue();
@@ -80,19 +76,4 @@ public class Authenticator {
             redisTemplate.expire(username, jwtInfo.JWT_REFRESH_TOKEN_VALIDITY, TimeUnit.MINUTES);
         }
     }
-//
-//    public void verifySignUpStatus(Member.SignUpStatus signUpStatus) {
-//        if (signUpStatus != Member.SignUpStatus.SIGN_UP_GRANT) {
-//            throw new MemberNotGrantedException();
-//        }
-//    }
-//
-//    public void verifyAdmin(UserDetails userDetails) {
-//        List<String> roles = userDetails.getAuthorities().stream()
-//                .map(grantedAuthority -> grantedAuthority.getAuthority()).collect(Collectors.toList());
-//
-//        if (!roles.contains("ROLE_ADMIN")) {
-//            throw new BusinessLogicException(ResponseCode.CAN_NOT_ACCESS_NON_ADMIN);
-//        }
-//    }
 }

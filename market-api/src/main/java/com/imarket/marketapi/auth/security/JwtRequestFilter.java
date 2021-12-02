@@ -66,6 +66,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         return registration;
     }
 
+    // TODO: Interceptor로 변경 필요
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
@@ -80,31 +81,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
-                // TODO Exception 처리
                 log.warn("Unable to get JWT Token");
-            }
-            catch (ExpiredJwtException e) {
-            }
+            } catch (ExpiredJwtException e) {}
         } else {
-            // TODO Exception 처리
             log.warn("JWT Token does not begin with Bearer String");
         }
 
-        log.info("redisInfo.radisEnable:" + redisInfo.redisEnable);
-
         if (username == null) {
-            // TODO Exception 처리
             log.info("token maybe expired: username is null.");
         } else if (redisInfo.redisEnable && redisTemplate.opsForValue().get(jwtToken) != null) {
-            // TODO Exception 처리
             log.warn("this token already logout!");
         } else {
-            //DB access 대신에 파싱한 정보로 유저 만들기!
             Authentication authen =  getAuthentication(jwtToken);
-
-            //만든 authentication 객체로 매번 인증받기
             SecurityContextHolder.getContext().setAuthentication(authen);
-            //response.setHeader("username", username);
         }
         chain.doFilter(request, response);
     }

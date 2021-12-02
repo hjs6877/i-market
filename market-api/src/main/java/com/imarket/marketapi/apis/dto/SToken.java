@@ -2,12 +2,13 @@ package com.imarket.marketapi.apis.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class SToken {
     private String accessToken;
     private String refreshToken;
-
-    public SToken() {}
 }

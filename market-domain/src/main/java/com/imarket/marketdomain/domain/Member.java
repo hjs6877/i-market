@@ -30,9 +30,6 @@ public class Member extends Auditable {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-//    @Field
-//    @SortableField
-//    @Analyzer(definition = "koreanAnalyzer")
     @Column(nullable = false)
     private String name;
     private String nickName;

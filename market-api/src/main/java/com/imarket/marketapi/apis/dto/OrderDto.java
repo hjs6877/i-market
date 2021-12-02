@@ -2,13 +2,18 @@ package com.imarket.marketapi.apis.dto;
 
 import com.imarket.marketdomain.domain.*;
 import lombok.Data;
+import org.springframework.data.domain.Page;
 
 import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class OrderDto {
     private long orderId;
+    private String email;
+    private String name;
     private String orderNumber;
     private Order.OrderStatus orderStatus;
     private String productName;
@@ -61,5 +66,16 @@ public class OrderDto {
         this.setCreatedAt(order.getCreatedAt());
 
         return this;
+    }
+
+    public static List<OrderDto> toOrderDtoList(Page<Order> orderPage) {
+        return orderPage.getContent()
+                .stream()
+                .map(order -> {
+                    OrderDto orderDto = new OrderDto();
+                    orderDto.setEmail(order.getBuyer().getMember().getEmail());
+                    orderDto.setName(order.getBuyer().getMember().getName());
+                    return orderDto.toOrderDto(order);
+                }).collect(Collectors.toList());
     }
 }

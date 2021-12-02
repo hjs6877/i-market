@@ -13,7 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import static com.imarket.marketdomain.domain.QMember.member;
-import static com.imarket.marketdomain.domain.QProduct.product;
+import static com.imarket.marketdomain.domain.QBuyer.buyer;
 
 public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     private JPAQueryFactory queryFactory;

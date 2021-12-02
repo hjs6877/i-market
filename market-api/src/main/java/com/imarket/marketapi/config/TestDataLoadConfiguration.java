@@ -55,21 +55,26 @@ public class TestDataLoadConfiguration {
                 passwordEncoder.encode("Hjs1234!"), "Tom", "010-1234-1111", Member.Gender.MALE);
         Seller seller1 = new Seller();
         Buyer buyer1 = new Buyer();
-        Product product1 = new Product("LG 냉장고", 200000);
+        Product product1 = new Product("LG 냉장고", 2000000);
+        Product product2 = new Product("삼성 TV", 1000000);
         Payment payment1 = new Payment("D뱅크", passwordEncoder.encode("1234-5678-1234-5678"));
+        member1.getRoles().add("USER");
         member1.setSeller(seller1);
         member1.setBuyer(buyer1);
         buyer1.addPayment(payment1);
         seller1.addProduct(product1);
+        seller1.addProduct(product2);
         product1.setProductCategory(productCategory1);
+        product2.setProductCategory(productCategory1);
 
         Member member2 = new Member("buyer1@imarket.com",
-                passwordEncoder.encode("Hjs1234!"), "Tom", "010-1111-1111", Member.Gender.MALE);
+                passwordEncoder.encode("Hjs1234!"), "David", "010-1111-1111", Member.Gender.MALE);
         Seller seller2 = new Seller();
         Buyer buyer2 = new Buyer();
         Payment payment2 = new Payment("A뱅크", passwordEncoder.encode("1111-2222-3333-4444"));
-        member1.setSeller(seller2);
-        member1.setBuyer(buyer2);
+        member2.getRoles().add("USER");
+        member2.setSeller(seller2);
+        member2.setBuyer(buyer2);
         buyer1.addPayment(payment2);
 
         Member member3 = new Member("buyer2@imarket.com",
@@ -77,8 +82,9 @@ public class TestDataLoadConfiguration {
         Seller seller3 = new Seller();
         Buyer buyer3 = new Buyer();
         Payment payment3 = new Payment("B뱅크", passwordEncoder.encode("5555-5555-5555-5555"));
-        member1.setSeller(seller3);
-        member1.setBuyer(buyer3);
+        member3.getRoles().add("USER");
+        member3.setSeller(seller3);
+        member3.setBuyer(buyer3);
         buyer1.addPayment(payment3);
 
 

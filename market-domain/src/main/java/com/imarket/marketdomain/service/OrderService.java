@@ -37,4 +37,9 @@ public class OrderService {
         return orderRepository.findByBuyerBuyerId(buyerId,
                 PageRequest.of(page, size, Sort.by("createdAt").descending()));
     }
+
+    public Page<Order> findOrdersBySeller(long sellerId, int page, int size) {
+        return orderRepository.findBySellerSellerId(sellerId,
+                PageRequest.of(page, size, Sort.by("createdAt").descending()));
+    }
 }

@@ -1,8 +1,9 @@
 package com.imarket.marketapi.apis;
 
+import com.imarket.marketapi.apis.dto.MemberDto;
 import com.imarket.marketapi.apis.dto.OrderDto;
 import com.imarket.marketapi.apis.response.MultiResponse;
-import com.imarket.marketapi.apis.response.SingleResponse;
+import com.imarket.marketdomain.domain.Member;
 import com.imarket.marketdomain.domain.Order;
 import com.imarket.marketdomain.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +17,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path = "/api/${api.version}/buyers", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/${api.version}/sellers", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "*")
-public class BuyerController {
+public class SellerController {
     private OrderService orderService;
 
     @Autowired
-    public BuyerController(OrderService orderService) {
+    public SellerController(OrderService orderService) {
         this.orderService = orderService;
     }
 
-    // Requirement: 단일 회원(구매자)의 주문 목록을 조회할 수 있어야 한다.
-    @GetMapping(path = "/{buyer-id}/orders")
-    public ResponseEntity<MultiResponse<OrderDto>> getAllOrdersByBuyer(@PathVariable("buyer-id") long buyerId,
-                                                                       int page,
-                                                                       int size) {
-        Page<Order> orderPage = orderService.findOrdersByBuyer(buyerId, page, size);
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(path = "/{seller-id}/orders")
+    public ResponseEntity<MultiResponse<OrderDto>> getOrdersBySeller(@PathVariable("seller-id") long sellerId,
+                                                                         @RequestParam("page") int page,
+                                                                         @RequestParam("size") int size) {
+        Page<Order> orderPage = orderService.findOrdersBySeller(sellerId, page, size);
         List<OrderDto> orderDtoList = OrderDto.toOrderDtoList(orderPage);
         return ResponseEntity.ok(new MultiResponse<>(HttpStatus.OK, orderDtoList, orderPage));
     }
