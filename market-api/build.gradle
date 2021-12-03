@@ -7,23 +7,21 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'com.auth0:java-jwt:3.10.0'
     testImplementation('org.springframework.security:spring-security-test')
-
     implementation 'mysql:mysql-connector-java'
-//    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.7.0'
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
     api project(':market-domain')
 }
-//task copyDocument(type: Copy) {
-//    dependsOn asciidoctor
-//    from file("build/asciidoc/html5/")
-//    into file("src/main/resources/static/docs")
-//}
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("build/asciidoc/html5/")
+    into file("src/main/resources/static/docs")
+}
 
-//build {
-//    dependsOn copyDocument
-//}
+build {
+    dependsOn copyDocument
+}
 
 bootJar {
     enabled = true
-//    dependsOn copyDocument
+    dependsOn copyDocument
 }

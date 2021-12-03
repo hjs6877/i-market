@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @Slf4j
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.imarket"})
+@ComponentScan(basePackages = {"com.imarket.*"})
 public class MarketApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(MarketApiApplication.class, args);

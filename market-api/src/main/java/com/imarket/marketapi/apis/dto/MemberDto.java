@@ -17,6 +17,8 @@ public class MemberDto {
     private String nickName;
     private String phone;
     private Member.Gender gender;
+    private long sellerId;
+    private long buyerId;
     private OrderDto order;
 
     @Data
@@ -66,6 +68,8 @@ public class MemberDto {
         this.nickName = member.getNickName();
         this.phone = member.getPhone();
         this.gender = member.getGender();
+        this.sellerId = member.getSeller().getSellerId();
+        this.buyerId = member.getBuyer().getBuyerId();
 
         // Requirement: 각 회원의 마지막 주문 정보가 포함되어야 한다.
         List<Order> orderList = member.getBuyer().getOrders();
