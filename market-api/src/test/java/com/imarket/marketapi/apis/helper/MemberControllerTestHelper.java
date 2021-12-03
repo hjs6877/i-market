@@ -38,9 +38,12 @@ public interface MemberControllerTestHelper extends ControllerTestHelper {
                 fieldWithPath(parentPath.concat("nickName")).type(JsonFieldType.STRING).description("회원 별칭"),
                 fieldWithPath(parentPath.concat("phone")).type(JsonFieldType.STRING).description("회원 전화번호"),
                 fieldWithPath(parentPath.concat("gender")).type(JsonFieldType.STRING).optional().description("성별"),
-                fieldWithPath(parentPath.concat("sellerId")).type(JsonFieldType.NUMBER).description("판매자 ID"),
-                fieldWithPath(parentPath.concat("buyerId")).type(JsonFieldType.NUMBER).description("구매자 ID"),
-                fieldWithPath(parentPath.concat("order")).type(JsonFieldType.OBJECT).description("마지막 주문 정보")
+                fieldWithPath(parentPath.concat("sellerId"))
+                        .type(JsonFieldType.NUMBER).description("판매자 ID").optional(),
+                fieldWithPath(parentPath.concat("buyerId"))
+                        .type(JsonFieldType.NUMBER).description("구매자 ID").optional(),
+                fieldWithPath(parentPath.concat("order"))
+                        .type(JsonFieldType.OBJECT).description("마지막 주문 정보").optional()
         );
     }
 }

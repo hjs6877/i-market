@@ -17,13 +17,14 @@ public class MemberDto {
     private String nickName;
     private String phone;
     private Member.Gender gender;
-    private long sellerId;
-    private long buyerId;
+    private Long sellerId;
+    private Long buyerId;
     private OrderDto order;
 
     @Data
     public static class Post {
-        private final String PASSWORD_MESSAGE =
+
+        private final static String PASSWORD_MESSAGE =
                 "비밀번호는 대,소문자와 숫자, 특수문자가 최소 1개 이상 포함된 8자 ~ 20자의 비밀번호여야 합니다.";
         @NotBlank(message = "이메일은 필수 입력값입니다.")
         @Email

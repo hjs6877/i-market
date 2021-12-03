@@ -11,17 +11,26 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
     api project(':market-domain')
 }
-task copyDocument(type: Copy) {
-    dependsOn asciidoctor
-    from file("build/asciidoc/html5/")
-    into file("src/main/resources/static/docs")
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+test {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
 }
 
-build {
-    dependsOn copyDocument
+asciidoctor {
+    configurations 'asciidoctorExtensions'
+    inputs.dir snippetsDir
+    dependsOn test
 }
 
 bootJar {
     enabled = true
-    dependsOn copyDocument
+    dependsOn asciidoctor
+    copy {
+        from "${asciidoctor.outputDir}"
+        into 'src/main/resources/static/docs'
+    }
 }

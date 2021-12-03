@@ -1,0 +1,28 @@
+= i-Market Server Rest Docs
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: Table of Contents
+:source-highlighter: prettify
+
+Hwang Jung Sik <jshwang@pentasecurity.com>
+
+v3.0.0, 2020.11.27
+
+***
+== Member Controller
+=== 회원 등록 요청
+.curl-request
+include::{snippets}/post-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-member/http-request.adoc[]
+
+.request-fields
+include::{snippets}/post-member/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-member/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-member/response-fields.adoc[]

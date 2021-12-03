@@ -19,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
@@ -32,6 +33,7 @@ import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
@@ -53,15 +55,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
-@ExtendWith(RestDocumentationExtension.class)
+@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @WebMvcTest(controllers = {MemberController.class},
         excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {JwtRequestFilter.class}))
 @AutoConfigureRestDocs
+@AutoConfigureMockMvc(addFilters = false)
 //@ActiveProfiles("test")
 public class MemberControllerTest implements MemberControllerTestHelper {
 
     @Autowired
     private MockMvc mvc;
+
+    @MockBean
+    private MemberService memberService;
 
     @BeforeEach
     public void setup() throws Exception {
@@ -73,36 +79,37 @@ public class MemberControllerTest implements MemberControllerTestHelper {
         // given
         Member responseMember = MockData.MockMember.get();
 
-//        given(memberService.saveMember(Mockito.any())).willReturn(responseMember);
-//
-//        // when
-//        MemberDto.Post memberPostDto = new MemberDto.Post();
-//        memberPostDto.setEmail("user@aaa.com");
-//        memberPostDto.setPassword("1111Aaaaa!");
-//        memberPostDto.setVerifiedPassword("1111Aaaaa!");
-//        memberPostDto.setName("user");
-//        memberPostDto.setNickName("Daddy");
-//        memberPostDto.setPhone("010-1111-1111");
-//        memberPostDto.setGender("MALE");
-//
-//        String content = toJsonContent(memberPostDto);
-//
-//        ResultActions result = mvc.perform(postRequestBuilder("/api/v1/users", content, MediaType.APPLICATION_JSON));
-//
-//        List<FieldDescriptor> memberRequestDescriptors = getDefaultMemberPostRequestDescriptors();
-//
-//        // then
-//        result.andExpect(status().isOk())
-//                .andExpect(jsonPath("$.data.userId").value("user@aaa.com"))
-//                .andDo(document("post-member",
-//                        getDocumentRequest(),
-//                        getDocumentResponse(),
-//                        requestFields(memberRequestDescriptors),
-//                        responseFields(
-//                                getFullResponseDescriptors(getMemberResponseDescriptors(DataResponseType.SINGLE))
-//                        )
-//                ));
-//
+        given(memberService.saveMember(Mockito.any())).willReturn(responseMember);
+
+        // when
+        MemberDto.Post memberPostDto = new MemberDto.Post();
+        memberPostDto.setEmail("user@aaa.com");
+        memberPostDto.setPassword("Hjs1234!");
+        memberPostDto.setVerifiedPassword("Hjs1234!");
+        memberPostDto.setName("user");
+        memberPostDto.setNickName("Daddy");
+        memberPostDto.setPhone("010-1111-1111");
+        memberPostDto.setGender("MALE");
+
+        String content = toJsonContent(memberPostDto);
+
+        ResultActions result =
+                mvc.perform(postRequestBuilder("/api/v1/members", content, MediaType.APPLICATION_JSON));
+
+        List<FieldDescriptor> memberRequestDescriptors = getDefaultMemberPostRequestDescriptors();
+
+        // then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.email").value("user@aaa.com"))
+                .andDo(document("post-member",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(memberRequestDescriptors),
+                        responseFields(
+                                getFullResponseDescriptors(getMemberResponseDescriptors(DataResponseType.SINGLE))
+                        )
+                ));
+
 
     }
 }
