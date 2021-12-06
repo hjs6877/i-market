@@ -6,7 +6,7 @@
 - 회원으로 등록한 한명의 회원이 구매자 또는 판매자가 될 수 있습니다.
 - 샘플 애플리케이션이므로 지불에 대한 구체적인 구현은 생략합니다.
 - 애플리케이션을 IntelliJ 같은 IDE 또는 jar 파일로 실행 시키기 위해서는 "spring.profiles.active=local"을 옵션으로 지정 해주어야 합니다.
-- Profile "local"로 애플리케이션을 실행시킬 경우 MySQL DB 대신에 H2 in-memory DB가 실행이 되고, 테스트 더미 데이터가 자동으로 입력이 됩니다.
+- rofile "local"로 애플리케이션을 실행시킬 경우 MySQL DB 대신에 H2 in-memory DB가 실행이 되고, 테스트 더미 데이터가 자동으로 입력이 됩니다.
 
 ## Object Entity Diagram
 ![Object Entity Diagram 이미지](https://github.com/hjs6877/i-market/blob/main/imarket_entity_diagram.png)
