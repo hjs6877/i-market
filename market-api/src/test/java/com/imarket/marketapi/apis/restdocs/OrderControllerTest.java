@@ -1,12 +1,17 @@
 package com.imarket.marketapi.apis.restdocs;
 
 import com.imarket.marketapi.apis.MemberController;
-import com.imarket.marketapi.auth.security.JwtRequestFilter;
-import com.imarket.marketapi.apis.dto.*;
+import com.imarket.marketapi.apis.OrderController;
+import com.imarket.marketapi.apis.dto.MemberDto;
+import com.imarket.marketapi.apis.dto.OrderDto;
 import com.imarket.marketapi.apis.helper.MemberControllerTestHelper;
 import com.imarket.marketapi.apis.helper.MockData;
+import com.imarket.marketapi.apis.helper.OrderControllerTestHelper;
+import com.imarket.marketapi.auth.security.JwtRequestFilter;
 import com.imarket.marketdomain.domain.Member;
+import com.imarket.marketdomain.domain.Order;
 import com.imarket.marketdomain.service.MemberService;
+import com.imarket.marketdomain.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +36,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,24 +45,25 @@ import static com.imarket.marketapi.apis.utils.ApiDocumentUtils.getDocumentRespo
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
-@WebMvcTest(controllers = {MemberController.class},
+@WebMvcTest(controllers = {OrderController.class},
         excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {JwtRequestFilter.class}))
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc(addFilters = false)
-public class MemberControllerTest implements MemberControllerTestHelper {
+public class OrderControllerTest implements OrderControllerTestHelper {
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private MemberService memberService;
+    private OrderService orderService;
 
     private String accessToken;
     private MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
@@ -69,96 +76,66 @@ public class MemberControllerTest implements MemberControllerTestHelper {
     }
 
     @Test
-    public void postUserTest() throws Exception {
+    public void postOrderTest() throws Exception {
         // given
-        Member responseMember = MockData.MockMember.get();
+        Order responseOrder = MockData.MockOrder.get();
 
-        given(memberService.saveMember(Mockito.any())).willReturn(responseMember);
+        given(orderService.saveOrder(Mockito.any())).willReturn(responseOrder);
 
         // when
-        MemberDto.Post memberPostDto = new MemberDto.Post();
-        memberPostDto.setEmail("user@aaa.com");
-        memberPostDto.setPassword("Hjs1234!");
-        memberPostDto.setVerifiedPassword("Hjs1234!");
-        memberPostDto.setName("user");
-        memberPostDto.setNickName("Daddy");
-        memberPostDto.setPhone("010-1111-1111");
-        memberPostDto.setGender("MALE");
+        OrderDto.Post orderPostDto = new OrderDto.Post();
+        orderPostDto.setProductId(1);
+        orderPostDto.setBuyerId(1);
+        orderPostDto.setSellerId(1);
+        orderPostDto.setPaymentId(1);
+        orderPostDto.setAmount(1);
 
-        String content = toJsonContent(memberPostDto);
+        String content = toJsonContent(orderPostDto);
 
         ResultActions result =
-                mvc.perform(postRequestBuilder("/api/v1/members", content, MediaType.APPLICATION_JSON));
+                mvc.perform(postRequestBuilder("/api/v1/orders", content, MediaType.APPLICATION_JSON, accessToken));
 
-        List<FieldDescriptor> memberRequestDescriptors = getDefaultMemberPostRequestDescriptors();
+        List<FieldDescriptor> orderRequestDescriptors = getDefaultOrderPostRequestDescriptors();
 
         // then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.email").value("user@aaa.com"))
-                .andDo(document("post-member",
+                .andExpect(jsonPath("$.data.orderId").value(1))
+                .andDo(document("post-order",
                         getDocumentRequest(),
                         getDocumentResponse(),
-                        requestFields(memberRequestDescriptors),
+                        requestHeaders(
+                                getDefaultRequestHeaderDescriptor()
+                        ),
+                        requestFields(orderRequestDescriptors),
                         responseFields(
-                                getFullResponseDescriptors(getMemberResponseDescriptors(DataResponseType.SINGLE))
+                                getFullResponseDescriptors(getOrderResponseDescriptors(DataResponseType.SINGLE))
                         )
                 ));
     }
 
     @Test
-    public void getMemberTest() throws Exception {
+    public void getOrderTest() throws Exception {
         // given
-        Member responseMember = MockData.MockMember.get();
-        given(memberService.findMemberById(1)).willReturn(responseMember);
+        Order responseOrder = MockData.MockOrder.get();
+        given(orderService.findOrderById(1)).willReturn(responseOrder);
 
         // when
-        long memberId = 1;
+        long orderId = 1;
 
-        mvc.perform(getRequestBuilder("/api/v1/members/{member-id}", memberId, MediaType.APPLICATION_JSON, accessToken))
+        mvc.perform(getRequestBuilder("/api/v1/orders/{order-id}", orderId, MediaType.APPLICATION_JSON, accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.email").value("user@aaa.com"))
-                .andExpect(jsonPath("$.data.memberId").value(1))
-                .andDo(document("get-member",
+                .andExpect(jsonPath("$.data.orderId").value(1))
+                .andDo(document("get-order",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
                                 getDefaultRequestHeaderDescriptor()
                         ),
                         pathParameters(
-                                parameterWithName("member-id").description("회원 ID")
+                                parameterWithName("order-id").description("주문 ID")
                         ),
                         responseFields(
-                                getFullResponseDescriptors(getMemberResponseDescriptors(DataResponseType.SINGLE))
-                        )
-                ));
-    }
-
-    @Test
-    public void getAllMembersTest() throws Exception {
-        // given
-        Member responseMember = MockData.MockMember.get();
-        Page<Member> memberPage =
-                new PageImpl(Arrays.asList(responseMember),
-                        PageRequest.of(0, 10, Sort.by("cratedAt").descending()), 10);
-        given(memberService.searchMember(null, null, 0, 10))
-                .willReturn(memberPage);
-
-        mvc.perform(getRequestBuilder("/api/v1/members", queryParams, MediaType.APPLICATION_JSON, accessToken))
-                .andExpect(status().isOk())
-                .andDo(document("get-all-members",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                getDefaultRequestHeaderDescriptor()
-                        ),
-                        requestParameters(
-                                parameterWithName("page").description("Page 번호"),
-                                parameterWithName("size").description("Page Size"),
-                                parameterWithName("email").description("이메일").optional(),
-                                parameterWithName("name").description("이름").optional()
-                        ),
-                        responseFields(
-                                getFullPageResponseDescriptors(getMemberResponseDescriptors(DataResponseType.LIST))
+                                getFullResponseDescriptors(getOrderResponseDescriptors(DataResponseType.SINGLE))
                         )
                 ));
     }

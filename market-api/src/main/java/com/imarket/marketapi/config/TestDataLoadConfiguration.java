@@ -33,7 +33,6 @@ public class TestDataLoadConfiguration {
     }
 
     private void createSampleData() {
-        // 상품 카테고리 등록
         ProductCategory productCategory1 = new ProductCategory("가전기기");
         ProductCategory productCategory2 = new ProductCategory("의류");
         ProductCategory productCategory3 = new ProductCategory("휴대폰/전자기기");

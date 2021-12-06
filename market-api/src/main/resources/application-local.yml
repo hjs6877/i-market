@@ -28,9 +28,9 @@ spring:
 #spring:
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
-#    password: amomarket
-#    url: jdbc:mysql://localhost:3306/amomarket?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
-#    username: amomarket
+#    password: imarket
+#    url: jdbc:mysql://localhost:3306/imarket?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+#    username: imarket
 #  jpa:
 #    database: mysql
 #    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

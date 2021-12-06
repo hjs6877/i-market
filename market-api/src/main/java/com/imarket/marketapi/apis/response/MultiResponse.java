@@ -9,10 +9,10 @@ import java.util.List;
 @Getter
 public class MultiResponse<T> extends CommonResponse {
     private List<T> data;
-    private PageInfo pageInfo;
+    private PageInfo page;
     public MultiResponse(HttpStatus status, List<T> data, Page page) {
         super(status);
         this.data = data;
-        this.pageInfo = new PageInfo(page.getNumber(), page.getSize(), page.getTotalElements(), page.getTotalPages());
+        this.page = new PageInfo(page.getNumber(), page.getSize(), page.getTotalElements(), page.getTotalPages());
     }
 }

@@ -154,6 +154,17 @@ public interface ControllerTestHelper<T> {
 
     }
 
+    default RequestBuilder postRequestBuilder(String uri,
+                                              MediaType mediaType,
+                                              String token) {
+        return RestDocumentationRequestBuilders
+                .post(uri)
+                .contentType(mediaType)
+                .accept(mediaType)
+                .header("authorization", "Bearer ".concat(token));
+
+    }
+
     default RequestBuilder patchRequestBuilder(String uri,
                                               long resourceId,
                                               String content,

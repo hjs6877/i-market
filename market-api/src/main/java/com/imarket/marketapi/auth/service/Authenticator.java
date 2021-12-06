@@ -69,7 +69,6 @@ public class Authenticator {
         retok.setUsername(username);
         retok.setRefreshToken(refreshToken);
 
-        //generate Token and save in redis
         if (redisInfo.redisEnable) {
             ValueOperations<String, Object> vop = redisTemplate.opsForValue();
             vop.set(username, retok);
